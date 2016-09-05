@@ -33,6 +33,16 @@ class TaskCell: UITableViewCell {
   override func awakeFromNib() {
     
   }
+    var taskId: String?
+    func configureWithTask(task: Task){
+        taskId = task.taskId
+        
+        check.selected = task.done
+        title!.text = task.title
+        priority!.text = task.priorityText
+        priority!.textColor = task.priorityColor
+        spinner.hidden = true
+    }
   
   @IBAction func toggleImageChecked(sender: UIButton) {
     

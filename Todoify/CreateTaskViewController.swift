@@ -28,8 +28,19 @@ class CreateTaskViewController: UITableViewController {
   @IBOutlet weak var taskTitle: UITextField!
   @IBOutlet weak var taskPrio: UISegmentedControl!
   @IBOutlet weak var taskUsers: UISegmentedControl!
+  let users: [User] = {
+      let realm = try! Realm()
+      return Array(realm.objects(User))
+    }()
+
   
   @IBAction func createTask(sender: AnyObject) {
+    let realm = try! Realm()
+    let task = Task(title: taskTitle.text!, priority: taskPrio.selectedSegmentIndex)
+        try! realm.write {
+        realm.add(task)
+    }
+    
     
     navigationController!.popViewControllerAnimated(true)
   }
@@ -38,5 +49,10 @@ class CreateTaskViewController: UITableViewController {
     super.viewWillAppear(animated)
     
     taskTitle.becomeFirstResponder()
+    taskUsers.removeAllSegments()
+    for user in users {
+        taskUsers.insertSegmentWithTitle(user.name, atIndex: taskUsers.numberOfSegments, animated: false)
+    }
+    taskUsers.selectedSegmentIndex = 0
   }
 }
